@@ -2,13 +2,13 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.renald.PhotoActivity',
-  appName: 'Photo Activity',
+  appName: 'PhotoActivity',
   webDir: 'www',
   plugins: {
     LiveUpdates: {
-      appId: 'a9d3fcd7',
+      appId: '888b1a81',
       channel: 'Production',
-      autoUpdateMethod: 'development',
+      autoUpdateMethod: 'none',
       maxVersions: 2
     }
   }
