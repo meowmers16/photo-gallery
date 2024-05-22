@@ -1,8 +1,9 @@
 import { CapacitorConfig } from '@capacitor/cli';
 import * as LiveUpdates from '@capacitor/live-updates';
 import { App } from '@capacitor/app';
-import { AuthConnect } from '@ionic-enterprise/auth'; // Assuming you are using Ionic AuthConnect
+
 import { SplashScreen } from '@capacitor/splash-screen';
+import { myApi } from './my-api'; // Ensure this path is correct
 
 // Capacitor configuration
 const config: CapacitorConfig = {
@@ -40,19 +41,19 @@ async function initializeApp() {
 
   // Check for reload condition on app start
   if (
-    localStorage.shouldReloadApp === 'true'
-    && localStorage.shouldBlockReload === 'false'
+    localStorage['shouldReloadApp'] === 'true' &&
+    localStorage['shouldBlockReload'] === 'false'
   ) {
     await LiveUpdates.reload();
   }
 
   // Register event to fire each time user resumes the app  
   App.addListener('resume', async () => {
-    if (localStorage.shouldReloadApp === 'true') {
+    if (localStorage['shouldReloadApp'] === 'true') {
       await LiveUpdates.reload();
     } else {
       const result = await LiveUpdates.sync();
-      localStorage.shouldReloadApp = result.activeApplicationPathChanged;
+      localStorage['shouldReloadApp'] = result.activeApplicationPathChanged.toString();
     }
   });
 
@@ -68,13 +69,15 @@ async function initializeApp() {
 // Call the initialize function
 initializeApp();
 
-// Authentication Service
+// Custom Authentication Service
 class AuthService {
   public async login() {
-    localStorage.shouldBlockReload = true;
-    await AuthConnect.login();
-    localStorage.shouldBlockReload = false;
+    localStorage['shouldBlockReload'] = 'true';
+    // Custom login logic here
+    localStorage['shouldBlockReload'] = 'false';
   }
 }
 
-// Export
+// Export an instance of AuthService
+export const authService = new AuthService();
+
