@@ -1,7 +1,7 @@
+import { Capacitor } from '@capacitor/core';
 import { CapacitorConfig } from '@capacitor/cli';
 import * as LiveUpdates from '@capacitor/live-updates';
 import { App } from '@capacitor/app';
-
 import { SplashScreen } from '@capacitor/splash-screen';
 import { myApi } from './my-api'; // Ensure this path is correct
 
@@ -27,6 +27,15 @@ export default config;
 
 // Initialize app with LiveUpdates
 async function initializeApp() {
+  // Check the platform
+  const platform = Capacitor.getPlatform();
+
+  if (platform === 'web') {
+    console.warn('LiveUpdates not implemented for web platform.');
+    await SplashScreen.hide();
+    return;
+  }
+
   // Log the user in and get their Live Updates config details from the backend
   const loggedInUser = await myApi.login();
 
